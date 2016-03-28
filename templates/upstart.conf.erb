@@ -1,0 +1,13 @@
+description "Marathon scheduler for Mesos"
+
+start on runlevel [2345]
+stop on runlevel [!2345]
+
+respawn
+respawn limit 10 5
+
+<%=
+exec = "exec #{@launcher_path}"
+exec += " --jar '#{@jar_file_path}'" if @jar_file_path
+exec
+%>

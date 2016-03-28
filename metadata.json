@@ -1,0 +1,33 @@
+{
+  "name": "puppet-marathon",
+  "version": "1.0.0",
+  "author": "Dmitry Ilyin",
+  "summary": "Manage the Marathon installation",
+  "license": "Apache License, Version 2.0",
+  "source": "https://github.com/fuel-infra/puppet-marathon",
+  "project_page": "https://github.com/fuel-infra/puppet-marathon",
+  "issues_url": "https://github.com/fuel-infra/puppet-marathon/issues",
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Ubuntu"
+    }
+  ],
+  "requirements": [
+    {
+      "name": "pe",
+      "version_requirement": ">= 3.4.0"
+    },
+    {
+      "name": "puppet",
+      "version_requirement": ">= 3.4.0"
+    }
+  ],
+  "description": "Manage the Marathon installation",
+  "types": [
+  ],
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib"
+    }
+  ]
+}
