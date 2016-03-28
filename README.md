@@ -118,26 +118,6 @@ Must be set to the real IP address of the node. If unset, the Marathon
 service will only be able to work with the local Mesos master.
 Default: 127.0.0.1
 
-### `java_manage`
-
-Should the module try to install the Java package?
-Default: true
-
-### `java_package`
-
-The name of the Java package to install.
-Default: openjdk-8-jre-headless
-
-### `java_ensure`
-
-The version of the Java package or one of present/installed/lates/absent.
-Default: present
-
-### `java_provider`
-
-Override the provider used to install the Java package.
-Default: undef
-
 ### `java_opts`
 
 A string of Java options
@@ -187,6 +167,7 @@ Default: /etc/default/${service_name}
 ### `startup_manage`
 
 Should the module try to install init/upstart scripts for the service?
+You should set *startup_system* if you enable this.
 Default: true
 
 ### `launcher_manage`
@@ -199,10 +180,27 @@ Default: true
 The path to the launcher shell script file.
 Default: /usr/bin/marathon
 
-### `jar_file`
+### `jar_file_path`
 
 The path to the actual Marathon jar file.
-Default: /usr/share/java/marathon-runnable.jar
+Default: undef
+
+### startup_system
+
+Which startup files should be installed?
+Default: undef
+
+### run_user
+
+Run the service by this system user in the startup files.
+User will NOT be created.
+Default: undef
+
+### run_group
+
+Run the service by this system group in the startup files.
+Group will NOT be created.
+Default: undef
 
 ### `options`
 

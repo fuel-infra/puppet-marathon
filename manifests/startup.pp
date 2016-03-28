@@ -1,9 +1,12 @@
 class marathon::startup(
-  $startup_manage         = $marathon::params::startup_manage,
-  $launcher_manage        = $marathon::params::launcher_manage,
-  $launcher_path          = $marathon::params::launcher_path,
-  $jar_file_path          = $marathon::params::jar_file_path,
-  $service_name           = $marathon::params::service_name,
+  $startup_manage  = $marathon::params::startup_manage,
+  $launcher_manage = $marathon::params::launcher_manage,
+  $launcher_path   = $marathon::params::launcher_path,
+  $jar_file_path   = $marathon::params::jar_file_path,
+  $service_name    = $marathon::params::service_name,
+  $startup_system  = $marathon::params::startup_system,
+  $run_user        = $marathon::params::run_user,
+  $run_group       = $marathon::params::run_group,
 ) inherits ::marathon::params {
   validate_string($service_name)
   validate_absolute_path($launcher_path)
@@ -23,24 +26,29 @@ class marathon::startup(
 
   if $startup_manage {
 
-    if $::operatingsystem == 'Ubuntu' {
+    if $startup_system == 'upstart' {
 
-      file { 'marathon_upstart_file' :
-        path    => "/etc/init/${service_name}.conf",
-        content => template('marathon/upstart.conf.erb'),
+      class { 'marathon::startup::upstart' :
+        launcher_path => $launcher_path,
+        jar_file_path => $jar_file_path,
+        service_name  => $service_name,
+        run_user      => $run_user,
+        run_group     => $run_group,
       }
 
-      file { 'marathon_init.d_wrapper' :
-        ensure => 'symlink',
-        path   => "/etc/init.d/${service_name}",
-        target => '/lib/init/upstart-job',
+      contain 'marathon::startup::upstart'
+
+    } elsif $startup_system == 'systemd' {
+
+      class { 'marathon::startup::systemd' :
+        launcher_path => $launcher_path,
+        jar_file_path => $jar_file_path,
+        service_name  => $service_name,
+        run_user      => $run_user,
+        run_group     => $run_group,
       }
 
-      File['marathon_upstart_file'] ~>
-      Service <| title == 'marathon' |>
-
-      File['marathon_init.d_wrapper'] ~>
-      Service <| title == 'marathon' |>
+      contain 'marathon::startup::systemd'
 
     }
 

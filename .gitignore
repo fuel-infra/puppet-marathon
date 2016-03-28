@@ -2,4 +2,4 @@
 *.swp
 *~
 Gemfile.lock
-spec/fixtures
+spec/fixtures/

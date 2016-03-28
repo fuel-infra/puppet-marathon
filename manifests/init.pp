@@ -17,10 +17,6 @@ class marathon (
 
   $libprocess_ip        = $marathon::params::libprocess_ip,
 
-  $java_manage          = $marathon::params::java_manage,
-  $java_package         = $marathon::params::java_package,
-  $java_ensure          = $marathon::params::java_ensure,
-  $java_provider        = $marathon::params::java_provider,
   $java_opts            = $marathon::params::java_opts,
   $java_home            = $marathon::params::java_home,
 
@@ -36,10 +32,11 @@ class marathon (
   $config_file_mode     = $marathon::params::config_file_mode,
 
   $startup_manage       = $marathon::params::startup_manage,
-
+  $startup_system       = $marathon::params::startup_system,
+  $run_user             = $marathon::params::run_user,
+  $run_group            = $marathon::params::run_group,
   $launcher_manage      = $marathon::params::launcher_manage,
   $launcher_path        = $marathon::params::launcher_path,
-
   $jar_file_path        = $marathon::params::jar_file_path,
 
   $options              = $marathon::params::options,
@@ -84,6 +81,9 @@ class marathon (
     startup_manage  => $startup_manage,
     jar_file_path   => $jar_file_path,
     service_name    => $service_name,
+    startup_system  => $startup_system,
+    run_user        => $run_user,
+    run_group       => $run_group,
   }
 
   class { '::marathon::service' :
@@ -93,20 +93,11 @@ class marathon (
     service_provider => $service_provider,
   }
 
-  class { '::marathon::java' :
-    java_manage   => $java_manage,
-    java_package  => $java_package,
-    java_ensure   => $java_ensure,
-    java_provider => $java_provider,
-  }
-
-  contain 'marathon::java'
   contain 'marathon::install'
   contain 'marathon::config'
   contain 'marathon::startup'
   contain 'marathon::service'
 
-  Class['marathon::java'] ->
   Class['marathon::install'] ->
   Class['marathon::config'] ->
   Class['marathon::startup'] ->
